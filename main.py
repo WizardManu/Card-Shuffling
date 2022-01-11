@@ -1,4 +1,4 @@
-from random import randint, choice
+from random import choice
 import os
 def MakeAndShuffleDeck():
   #Deck Maker
@@ -18,7 +18,7 @@ def MakeAndShuffleDeck():
   return(ShuffledDeck)
 #print(ShuffledDeck)
 
-def PlayBlackJack(CurrentPoints):
+def PlayBlackJack():
   def Count(hand):
     HandValue = 0
     AcesCount = 0
@@ -42,11 +42,10 @@ def PlayBlackJack(CurrentPoints):
       return((False,HandValue,True))
     return((False, HandValue,False))
 
-  CurrentTopCard = 4
-  DealerHand = [ShuffledDeck[0],ShuffledDeck[2]]
-  YourHand = [ShuffledDeck[1], ShuffledDeck[3]]
-  os.system('cls' if os.name == 'nt' else 'clear')
-  print('You Have', CurrentPoints)
+  DealerHand = [ShuffledDeck.pop()]
+  YourHand = [ShuffledDeck.pop()]
+  DealerHand.append(ShuffledDeck.pop())
+  YourHand.append(ShuffledDeck.pop())
   print('Dealers Open Card is', DealerHand[0])
   print('Your Hand is', YourHand)
   if Count(YourHand)[2] == True:
@@ -74,8 +73,7 @@ def PlayBlackJack(CurrentPoints):
   DoubledDown = False
   if answer == 'Yes' or answer == 'yes':
     DoubledDown = True
-    YourHand.append(ShuffledDeck[CurrentTopCard])
-    CurrentTopCard = CurrentTopCard + 1
+    YourHand.append(ShuffledDeck.pop())
     print('Your New Hand is', YourHand)
     playing = False
 
@@ -83,8 +81,7 @@ def PlayBlackJack(CurrentPoints):
   while playing:
     HitOrStand = input("Hit or Stand?")
     if HitOrStand == 'Hit':
-      YourHand.append(ShuffledDeck[CurrentTopCard])
-      CurrentTopCard = CurrentTopCard + 1
+      YourHand.append(ShuffledDeck.pop())
       print('Your New Hand is', YourHand)
     elif HitOrStand == 'Stand':
       playing = False
@@ -98,8 +95,7 @@ def PlayBlackJack(CurrentPoints):
       print('Your Count Is',Count(YourHand)[1])
     print('')
   while Count(DealerHand)[1] < 17:
-    DealerHand.append(ShuffledDeck[CurrentTopCard])
-    CurrentTopCard = CurrentTopCard + 1
+    DealerHand.append(ShuffledDeck.pop())
     print('Dealers New Hand is', DealerHand)
   print('Dealers Has', DealerHand)
   print('You Have', YourHand)
@@ -126,7 +122,8 @@ InGame = True
 points = 0
 while InGame:
   ShuffledDeck = MakeAndShuffleDeck()
-  WinOrLose = PlayBlackJack(points)
-  points += WinOrLose
+  os.system('cls' if os.name == 'nt' else 'clear')
+  print('You Have', points)
+  points += PlayBlackJack()
   if input('Do You Want to Continue?') == 'No':
     InGame = False
