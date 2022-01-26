@@ -53,6 +53,43 @@ class hand():
     if AcesCount > 0:
       return((False, HandValue, True))
     return((False, HandValue, False))
+  
+  def PokerCount(self):
+    suits = []
+    numbers = []
+    HandValue = 0
+    for card in self.cards:
+      if card[0] == 'J':
+        numbers.append(11)
+      elif card[0] == 'Q':
+        numbers.append(12)
+      elif card[0] == 'K':
+        numbers.append(13)
+      elif card[0] == 'A':
+        numbers.append(14)
+      else:  
+        numbers.append(int(card[0]))
+      suits.append(card[1])
+    numbers.sort()
+    UniqueCards = set(numbers)
+    if len(UniqueCards) == 1:
+      HandValue += 40000
+      HandValue += UniqueCards.pop() * 100
+    elif len(UniqueCards) == 2:
+      HandValue += 10000
+      HandValue += numbers[1] * 100
+    elif numbers[2] == numbers[1] + 1 and numbers[2] == numbers[0] + 2:
+      if len(set(suits)) == 1:
+        HandValue += 50000
+        HandValue += numbers[2] * 100
+      else:
+        HandValue += 30000
+        HandValue += numbers[2] * 100
+    elif len(set(suits)) == 1:
+      HandValue += 20000
+    HandValue += numbers[2]
+    return(HandValue)
+    
 
 
 def PlayBlackJack():
@@ -60,7 +97,6 @@ def PlayBlackJack():
   ShuffledDeck = deck()
   DealerHand = hand()
   YourHand = hand()
-
   ShuffledDeck.draw(DealerHand)
   ShuffledDeck.draw(YourHand)
   ShuffledDeck.draw(DealerHand)
@@ -156,9 +192,43 @@ def PlayBlackJack():
       OnFirstHand = False
       print('You Are Now On Your Second Hand')
       print('')
+      playing = True
     TruePointChange += PointChange  
   return(TruePointChange)
 
+def PlayThreeCard():
+  ShuffledDeck = deck()
+  YourHand = hand()
+  DealerHand = hand()
+  for card in range(0,3):
+    ShuffledDeck.draw(YourHand)
+    ShuffledDeck.draw(DealerHand)
+  print(YourHand.cards)
+  Raised = input("Raise or Fold?")
+  if Raised == "Raise" or Raised == "raise":
+    print(YourHand.PokerCount())
+    print(DealerHand.cards)
+    print(DealerHand.PokerCount())
+    if DealerHand.PokerCount() <= YourHand.PokerCount():
+      print('You Win')
+      return(1)
+    else:
+      print('You Lose')
+      return(-1)
+  else:
+    return(-0.5)
+
+InGame = True
+points = 0
+while InGame:
+  os.system('cls' if os.name == 'nt' else 'clear')
+  print('You Have', points)
+  points += PlayThreeCard()
+  if input('Do You Want to Continue?') == 'No':
+    InGame = False
+
+
+'''
 InGame = True
 points = 0
 while InGame:
@@ -167,3 +237,4 @@ while InGame:
   points += PlayBlackJack()
   if input('Do You Want to Continue?') == 'No':
     InGame = False
+'''

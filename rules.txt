@@ -8,4 +8,4 @@ Surrendering is not offered
 Doubling is offered
 Spliting is offered
 You cannot split on a split
-You cannot double on a split
+You can double on a split
