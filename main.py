@@ -262,11 +262,11 @@ while InGame:
   pastpoints.append(points)
   if input('Do You Want to Continue?') == 'No':
     InGame = False
+
 plt.plot(pastpoints)
 plt.ylabel('Point Values')
 plt.xlabel('Game Number')
-plt.figure(figsize=(5, 5))
-plt.savefig('plot.png')
+plt.figure(figsize=(3, 3))
 plt.show()
 
 
