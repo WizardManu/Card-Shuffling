@@ -1,25 +1,57 @@
 from random import choice
 import os
+import matplotlib.pyplot as plt
+
+class card():
+
+  def __init__(self, suit, rank):
+    """Represents a card."""
+    setattr(self,'suit', suit)
+    setattr(self, 'rank', rank)
+
+  def BJValue(self):
+      if self.rank in ['0', 'J', 'Q', 'K']:
+        return 10
+      elif self.rank == 'A':
+        return 11
+      else:
+        return int(self.rank)
+    
+  def PokerValue(self):
+    if self.rank == '0':
+      return 10
+    elif self.rank == 'J':
+      return 11
+    elif self.rank == 'Q':
+      return 12
+    elif self.rank == 'K':
+      return 13
+    elif self.rank == 'A':
+      return 14
+    else:
+      return int(self.rank)
+  def CardValue(self):
+    return(self.rank + self.suit)
+
 
 class deck():
 
   def __init__(self):
+    """Initializes self.cards as a shuffled list."""
     #Deck Maker
     suits = ['♣','♦','♥','♠']
-    cards = ['A','2','3','4','5','6','7','8','9','0','J','Q','K']
-    FullDeck = []
-    for card in cards:
-      for suit in suits:
-        FullDeck.append(card + suit)
+    ranks = ['A','2','3','4','5','6','7','8','9','0','J','Q','K']
+    FullDeck = [card(suit, rank) for rank in ranks for suit in suits]
 
     self.cards = []
     #Deck Shuffler
-    for card in range(0,52):
+    for each_card in range(0,52):
       RandomCard = choice(FullDeck)
       self.cards.append(RandomCard)
       FullDeck.remove(RandomCard)
 
   def draw(self, hand):
+    """Removes top card from deck and adds to hand."""
     hand.append(self.cards.pop())
 
 
@@ -35,22 +67,15 @@ class hand():
     HandValue = 0
     AcesCount = 0
     for card in self.cards:
-      value = card[0]
-      if value == '0':
-        value = 10
-      elif value == 'J' or value == 'Q' or value == 'K':
-        value = 10
-      elif value == 'A':
-        AcesCount += 1
-        value = 11
-      value = int(value)
-      HandValue += value
+      HandValue += card.BJValue()
+      AcesCount += (card.rank == 'A')
+
     while AcesCount > 0 and HandValue > 21:
       HandValue = HandValue - 10
       AcesCount = AcesCount - 1
     if HandValue > 21:
-      return((True, HandValue,False))
-    if AcesCount > 0:
+      return((True, HandValue, False))
+    elif AcesCount > 0:
       return((False, HandValue, True))
     return((False, HandValue, False))
   
@@ -59,25 +84,19 @@ class hand():
     numbers = []
     HandValue = 0
     for card in self.cards:
-      if card[0] == 'J':
-        numbers.append(11)
-      elif card[0] == 'Q':
-        numbers.append(12)
-      elif card[0] == 'K':
-        numbers.append(13)
-      elif card[0] == 'A':
-        numbers.append(14)
-      else:  
-        numbers.append(int(card[0]))
-      suits.append(card[1])
+      numbers.append(card.PokerValue())
+      suits.append(card.suit)
     numbers.sort()
     UniqueCards = set(numbers)
-    if len(UniqueCards) == 1:
+    if len(UniqueCards) == 1:  # This is a Triple
       HandValue += 40000
       HandValue += UniqueCards.pop() * 100
-    elif len(UniqueCards) == 2:
+    elif len(UniqueCards) == 2:  # This is a pair
       HandValue += 10000
-      HandValue += numbers[1] * 100
+      thepair = numbers[1]
+      HandValue += thepair * 100
+      numbers.remove(thepair) 
+      numbers.remove(thepair)
     elif numbers[2] == numbers[1] + 1 and numbers[2] == numbers[0] + 2:
       if len(set(suits)) == 1:
         HandValue += 50000
@@ -87,8 +106,20 @@ class hand():
         HandValue += numbers[2] * 100
     elif len(set(suits)) == 1:
       HandValue += 20000
-    HandValue += numbers[2]
+      HandValue += numbers[-1] * 100
+      del numbers[-1]
+    else:
+      HandValue += numbers[-1] * 100
+      del numbers[-1]
+    HandValue += numbers[-1]
     return(HandValue)
+  
+  def PrintableValue(self):
+    printablehand = ''
+    for acard in self.cards:
+      printablehand += acard.CardValue() + ', '
+    return printablehand
+
     
 
 
@@ -203,15 +234,18 @@ def PlayThreeCard():
   for card in range(0,3):
     ShuffledDeck.draw(YourHand)
     ShuffledDeck.draw(DealerHand)
-  print(YourHand.cards)
-  Raised = input("Raise or Fold?")
-  if Raised == "Raise" or Raised == "raise":
+  print(YourHand.PrintableValue())
+  Raised = (YourHand.PokerCount() >= 1206)
+  #input("Raise or Fold?")
+  if Raised: #== "Raise" or Raised == "raise":
     print(YourHand.PokerCount())
-    print(DealerHand.cards)
+    print(DealerHand.PrintableValue())
     print(DealerHand.PokerCount())
     if DealerHand.PokerCount() <= YourHand.PokerCount():
-      print('You Win')
-      return(1)
+      if DealerHand.PokerCount() >= 12:
+        return 1
+      else:
+        return 0.5 
     else:
       print('You Lose')
       return(-1)
@@ -220,12 +254,20 @@ def PlayThreeCard():
 
 InGame = True
 points = 0
+pastpoints = []
 while InGame:
   os.system('cls' if os.name == 'nt' else 'clear')
   print('You Have', points)
   points += PlayThreeCard()
+  pastpoints.append(points)
   if input('Do You Want to Continue?') == 'No':
     InGame = False
+plt.plot(pastpoints)
+plt.ylabel('Point Values')
+plt.xlabel('Game Number')
+plt.figure(figsize=(5, 5))
+plt.savefig('plot.png')
+plt.show()
 
 
 '''
