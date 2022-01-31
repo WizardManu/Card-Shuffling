@@ -243,32 +243,39 @@ def PlayThreeCard():
     print(DealerHand.PokerCount())
     if DealerHand.PokerCount() <= YourHand.PokerCount():
       if DealerHand.PokerCount() >= 12:
+        print("You win, Dealer Plays")
         return 1
       else:
+        print("You win, Dealer Folds")
         return 0.5 
     else:
       print('You Lose')
       return(-1)
   else:
+    print("You Folded")
     return(-0.5)
 
 InGame = True
 points = 0
 pastpoints = []
-while InGame:
+for i in range(0,1000):
   os.system('cls' if os.name == 'nt' else 'clear')
   print('You Have', points)
   points += PlayThreeCard()
   pastpoints.append(points)
-  if input('Do You Want to Continue?') == 'No':
-    InGame = False
+  if points < -10:
+    print(i)
+    break
+# if input('Do You Want to Continue?') == 'No':
+#   InGame = False
 
 plt.plot(pastpoints)
+#print(pastpoints)
 plt.ylabel('Point Values')
 plt.xlabel('Game Number')
-plt.figure(figsize=(3, 3))
+plt.figure(figsize=(10, 10))
+plt.tight_layout(0.5)
 plt.show()
-
 
 '''
 InGame = True
