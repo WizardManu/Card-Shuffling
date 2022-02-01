@@ -112,7 +112,10 @@ class hand():
       HandValue += numbers[-1] * 100
       del numbers[-1]
     HandValue += numbers[-1]
-    return(HandValue)
+    if len(numbers) >= 2:
+      HandValue += numbers[-2] * 0.01
+    return HandValue
+
   
   def PrintableValue(self):
     printablehand = ''
@@ -235,7 +238,7 @@ def PlayThreeCard():
     ShuffledDeck.draw(YourHand)
     ShuffledDeck.draw(DealerHand)
   print(YourHand.PrintableValue())
-  Raised = (YourHand.PokerCount() >= 1206)
+  Raised = (YourHand.PokerCount() >= 1206.04)
   #input("Raise or Fold?")
   if Raised: #== "Raise" or Raised == "raise":
     print(YourHand.PokerCount())
@@ -258,7 +261,7 @@ def PlayThreeCard():
 InGame = True
 points = 0
 pastpoints = []
-for i in range(0,1000):
+for i in range(0,2500):
   os.system('cls' if os.name == 'nt' else 'clear')
   print('You Have', points)
   points += PlayThreeCard()
