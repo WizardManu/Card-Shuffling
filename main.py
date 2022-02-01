@@ -1,6 +1,5 @@
 from random import choice
 import os
-import matplotlib.pyplot as plt
 
 class card():
 
@@ -256,7 +255,7 @@ def PlayThreeCard():
 
 
 WhichGame = input('BlackJack or Three Card Poker')
-if WhichGame in ['BlackJack','blackjack','Black Jack','black jack']:
+if WhichGame in ['Three Card Poker', 'Poker', 'Three Card', 'poker', 'three card poker', 'three card']:
   InGame = True
   points = 0
   pastpoints = []
@@ -267,7 +266,7 @@ if WhichGame in ['BlackJack','blackjack','Black Jack','black jack']:
     pastpoints.append(points)
     if input('Do You Want to Continue?') == 'No':
       InGame = False
-elif WhichGame in ['Three Card Poker', 'Poker', 'Three Card', 'poker', 'three card poker', 'three card']:
+elif WhichGame in ['BlackJack','blackjack','Black Jack','black jack']:
   InGame = True
   points = 0
   while InGame:
