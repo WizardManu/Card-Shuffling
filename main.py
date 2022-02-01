@@ -240,7 +240,7 @@ def PlayThreeCard():
     print(DealerHand.PrintableValue())
     print(DealerHand.PokerCount())
     if DealerHand.PokerCount() <= YourHand.PokerCount():
-      if DealerHand.PokerCount() >= 12:
+      if DealerHand.PokerCount() >= 1200:
         print("You win, Dealer Plays")
         return 1
       else:
