@@ -267,7 +267,7 @@ for i in range(0,2500):
   points += PlayThreeCard()
   pastpoints.append(points)
   if points < -10:
-    print(i)
+    print('You made it', i)
     break
 # if input('Do You Want to Continue?') == 'No':
 #   InGame = False
@@ -277,7 +277,6 @@ plt.plot(pastpoints)
 plt.ylabel('Point Values')
 plt.xlabel('Game Number')
 plt.figure(figsize=(10, 10))
-plt.tight_layout(0.5)
 plt.show()
 
 '''
