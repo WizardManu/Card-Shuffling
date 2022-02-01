@@ -235,9 +235,8 @@ def PlayThreeCard():
     ShuffledDeck.draw(YourHand)
     ShuffledDeck.draw(DealerHand)
   print(YourHand.PrintableValue())
-  Raised = (YourHand.PokerCount() >= 1206)
-  #input("Raise or Fold?")
-  if Raised: #== "Raise" or Raised == "raise":
+  Raised = input("Raise or Fold?")
+  if Raised == "Raise" or Raised == "raise":
     print(YourHand.PokerCount())
     print(DealerHand.PrintableValue())
     print(DealerHand.PokerCount())
@@ -255,35 +254,25 @@ def PlayThreeCard():
     print("You Folded")
     return(-0.5)
 
-InGame = True
-points = 0
-pastpoints = []
-for i in range(0,1000):
-  os.system('cls' if os.name == 'nt' else 'clear')
-  print('You Have', points)
-  points += PlayThreeCard()
-  pastpoints.append(points)
-  if points < -10:
-    print(i)
-    break
-# if input('Do You Want to Continue?') == 'No':
-#   InGame = False
 
-plt.plot(pastpoints)
-#print(pastpoints)
-plt.ylabel('Point Values')
-plt.xlabel('Game Number')
-plt.figure(figsize=(10, 10))
-plt.tight_layout(0.5)
-plt.show()
-
-'''
-InGame = True
-points = 0
-while InGame:
-  os.system('cls' if os.name == 'nt' else 'clear')
-  print('You Have', points)
-  points += PlayBlackJack()
-  if input('Do You Want to Continue?') == 'No':
-    InGame = False
-'''
+WhichGame = input('BlackJack or Three Card Poker')
+if WhichGame in ['BlackJack','blackjack','Black Jack','black jack']:
+  InGame = True
+  points = 0
+  pastpoints = []
+  while InGame:
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print('You Have', points)
+    points += PlayThreeCard()
+    pastpoints.append(points)
+    if input('Do You Want to Continue?') == 'No':
+      InGame = False
+elif WhichGame in ['Three Card Poker', 'Poker', 'Three Card', 'poker', 'three card poker', 'three card']:
+  InGame = True
+  points = 0
+  while InGame:
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print('You Have', points)
+    points += PlayBlackJack()
+    if input('Do You Want to Continue?') == 'No':
+      InGame = False
