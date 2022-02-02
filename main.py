@@ -131,8 +131,8 @@ def PlayBlackJack():
   ShuffledDeck.draw(YourHand)
   ShuffledDeck.draw(DealerHand)
   ShuffledDeck.draw(YourHand)
-  print('Dealers Open Card is', DealerHand.cards[0])
-  print('Your Hand is', YourHand.cards)
+  print('Dealers Open Card is', DealerHand.cards[0].CardValue())
+  print('Your Hand is', YourHand.PrintableValue())
   if YourHand.count()[2] == True:
     print('Your Count Is',YourHand.count()[1],'/',YourHand.count()[1] - 10)
   else:
@@ -156,7 +156,7 @@ def PlayBlackJack():
   rounds = 1
   OnFirstHand = False
 
-  if YourHand.cards[0][0] == YourHand.cards[1][0]:
+  if YourHand.cards[0].rank == YourHand.cards[1].rank:
     if input('Do You Want to Split?') == 'yes':
       OnFirstHand = True
       rounds = 2
@@ -175,7 +175,7 @@ def PlayBlackJack():
     if answer == 'Yes' or answer == 'yes':
       DoubledDown = True
       ShuffledDeck.draw(YourHand)
-      print('Your New Hand is', YourHand.cards)
+      print('Your New Hand is', YourHand.PrintableValue())
       playing = False
 
 
@@ -183,7 +183,7 @@ def PlayBlackJack():
       HitOrStand = input("Hit or Stand?")
       if HitOrStand == 'Hit':
         ShuffledDeck.draw(YourHand)
-        print('Your New Hand is', YourHand.cards)
+        print('Your New Hand is', YourHand.PrintableValue())
       elif HitOrStand == 'Stand':
         playing = False
       else:
@@ -197,9 +197,9 @@ def PlayBlackJack():
       print('')
     while DealerHand.count()[1] < 17:
       ShuffledDeck.draw(DealerHand)
-      print('Dealers New Hand is', DealerHand.cards)
-    print('Dealers Has', DealerHand.cards)
-    print('You Have', YourHand.cards)
+      print('Dealers New Hand is', DealerHand.PrintableValue())
+    print('Dealers Has', DealerHand.PrintableValue())
+    print('You Have', YourHand.PrintableValue())
     if YourHand.count()[0] == True:
       print('Bust, You Lose')
       PointChange = -1
